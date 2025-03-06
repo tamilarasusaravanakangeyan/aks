@@ -3,7 +3,7 @@ Deploying .Net Microservices into Kubernetes, and moving deployments to the clou
 
 | Image | Status |
 | ------------- | ------------- |
-| Shopping Client |  [![Build Status](https://tamilarasusaravanakangeyan.visualstudio.com/aks/_apis/build/status%2Fshoppingclient?branchName=main)](https://tamilarasusaravanakangeyan.visualstudio.com/aks/_build/latest?definitionId=8&branchName=main) |
+| Shopping Client | [![Build Status](https://tamilarasusaravanakangeyan.visualstudio.com/aks/_apis/build/status%2Fshoppingclient?branchName=main)](https://tamilarasusaravanakangeyan.visualstudio.com/aks/_build/latest?definitionId=8&branchName=main) |
 | Shopping API | [![Build Status](https://tamilarasusaravanakangeyan.visualstudio.com/aks/_apis/build/status%2Fshoppingapi?branchName=main)](https://tamilarasusaravanakangeyan.visualstudio.com/aks/_build/latest?definitionId=7&branchName=main) | | |
 
 ### Overall Picture
