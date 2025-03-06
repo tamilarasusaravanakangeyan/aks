@@ -6,15 +6,10 @@ Deploying .Net Microservices into Kubernetes, and moving deployments to the clou
 | Shopping Client |  [![Build Status](https://dev.azure.com/ezozkme/shopping/_apis/build/status/shoppingclient-pipeline?branchName=main)](https://dev.azure.com/ezozkme/shopping/_build/latest?definitionId=14&branchName=main) |
 | Shopping API | [![Build Status](https://dev.azure.com/ezozkme/shopping/_apis/build/status/shoppingapi-pipeline?branchName=main)](https://dev.azure.com/ezozkme/shopping/_build/latest?definitionId=13&branchName=main) | | |
 
-
-**UDEMY COURSE WITH DISCOUNTED - Step by Step Development of this repository -> https://www.udemy.com/course/deploying-net-microservices-with-k8s-aks-and-azure-devops/?couponCode=APRI24**
-
-**Check Explanation of this Repository on Medium -> https://mehmetozkaya.medium.com/deploying-net-microservices-to-azure-kubernetes-services-aks-and-automating-with-azure-devops-c50bdd51b702**
-
 ### Overall Picture
 See the overall picture. You can see that we will have 3 microservices which we are going to develop and deploy together.
 
-![Overall Picture of Repository](https://user-images.githubusercontent.com/1147445/105671396-b152f580-5ef3-11eb-8f3b-7f9f7c9c4d24.png)
+![Overall Picture of Repository](image/image.png)
 
 ### Shopping MVC Client Application
 First of all, we are going to develop Shopping MVC Client Application For Consuming Api Resource which will be the Shopping.Client Asp.Net MVC Web Project. But we will start with developing this project as a standalone Web application which includes own data inside it. And we will add container support with DockerFile, push docker images to Docker hub and see the deployment options like “Azure Web App for Container” resources for 1 web application.
@@ -37,6 +32,6 @@ Update microservices with zero-downtime deployments.
 And the last step, we are focusing on automation deployments with creating CI/CD pipelines on Azure Devops tool. We will develop separate microservices deployment pipeline yamls with using Azure Pipelines.
 When we push code to Github, microservices pipeline triggers, build docker images and push the ACR, deploy to Azure Kubernetes services with zero-downtime deployments.
 
-![cicd](https://user-images.githubusercontent.com/1147445/105671542-f37c3700-5ef3-11eb-9532-59a5855214d0.png)
+![cicd](image/image1.png)
 
 You’ll see how to deploy your multi-container microservices applications with automating all deployment process seperately.
