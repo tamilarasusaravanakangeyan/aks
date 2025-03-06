@@ -1,0 +1,6 @@
+@tam_aks_learn_service_HostAddress = http://localhost:5270
+
+GET {{tam_aks_learn_service_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
