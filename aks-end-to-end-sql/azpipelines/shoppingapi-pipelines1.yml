@@ -18,9 +18,9 @@ variables:
 
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'b7cabdaa-5a1d-465a-a448-a37f41929edb'
-  imageRepository: 'tamilarasusaravanakangeyanaks'
+  imageRepository: 'shoppingapi'
   containerRegistry: 'shoppingacrtamil.azurecr.io'
-  dockerfilePath: '**/Dockerfile'
+  dockerfilePath: 'aks-end-to-end-sql/Shopping/Shopping.API/Dockerfile'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'shoppingacrtamil3548852d-auth'
 
@@ -44,6 +44,7 @@ stages:
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
+        buildContext: $(Build.SourcesDirectory)/aks-end-to-end-sql/Shopping
         tags: |
           $(tag)
 
