@@ -48,8 +48,8 @@ stages:
         tags: |
           $(tag)
 
-    - upload: aks-end-to-end/aksl
-      artifact: aks-end-to-end/aksl
+    - upload: aks-end-to-end-sql/aksl
+      artifact: aks-end-to-end-sql/aksl
 
 - stage: Deploy
   displayName: Deploy stage
