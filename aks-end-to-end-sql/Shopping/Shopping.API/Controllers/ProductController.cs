@@ -29,7 +29,40 @@ namespace Shopping.API.Controllers
         [HttpGet]
         public async Task<IEnumerable<Product>> Get()
         {
-            return await _context.Products.ToListAsync();
+            await Task.Delay(1000);
+            List<Product> products = new List<Product>();
+            products.Add(
+                new Product
+                {
+                    Id = "1",  // Assuming Id is a string and is unique
+                    Name = "Product 1",
+                    Category = "Category A",
+                    Description = "Description of Product 1",
+                    ImageFile = "product1.jpg",
+                    Price = 100
+                });
+            products.Add(new Product
+            {
+                Id = "2",
+                Name = "Product 2",
+                Category = "Category B",
+                Description = "Description of Product 2",
+                ImageFile = "product2.jpg",
+                Price = 200
+            });
+            products.Add(new Product
+            {
+                Id = "3",
+                Name = "Product 3",
+                Category = "Category C",
+                Description = "Description of Product 3",
+                ImageFile = "product3.jpg",
+                Price = 300
+            });
+
+            return products.ToList();
+
+            //return await _context.Products.ToListAsync();
         }
 
         // GET: api/products/{id}
