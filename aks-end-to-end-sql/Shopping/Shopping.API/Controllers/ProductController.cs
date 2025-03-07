@@ -27,7 +27,7 @@ namespace Shopping.API.Controllers
 
         // GET: api/products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<IEnumerable<Product>> Get()
         {
             return await _context.Products.ToListAsync();
         }
