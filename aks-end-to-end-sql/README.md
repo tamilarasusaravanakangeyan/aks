@@ -1,5 +1,116 @@
-# Deploying .Net Microservices to Azure Kubernetes Services(AKS) and Automating with Azure DevOps
+# Deploying .Net Microservices with sql database to Azure Kubernetes Services(AKS) and Automating with Azure DevOps
 Deploying .Net Microservices into Kubernetes, and moving deployments to the cloud Azure Kubernetes Services (AKS) with using Azure Container Registry (ACR) and how to Automating Deployments with Azure DevOps and GitHub.
+![](image/connectionflow.png)
+
+Create Resource Group:
+```
+az group create -n rglsaks --location centralindia
+```
+
+
+Create Vnet & Subnet:
+```
+az network vnet create -g rglsaks -n vnetlsakssql --address-prefix 10.0.0.0/8 --subnet-name subnetlsakssql --subnet-prefix 10.240.0.0/16
+```
+
+
+Create SQL Server:
+```
+az sql server create -n sqlsrvlsaks -g rglsaks --location centralindia --admin-user lsaksadmin --admin-password lsakspassword@25
+```
+
+
+
+Create SQL DB(Free Tier):
+# az sql db create -g rglsaks --server sqldblsaks --name subnetlsakssql --service-objective S0
+```
+az sql db create -g rglsaks --server sqlsrvlsaks --name sqldblsaks --edition GeneralPurpose --family Gen5 --compute-model Serverless --capacity 1 --auto-pause-delay 60
+```
+
+
+Link Service end point with Subnet
+```
+az network vnet subnet update --name subnetlsakssql --vnet-name vnetlsakssql -g rglsaks --service-endpoints Microsoft.sql
+```
+
+
+Create Vnet rule:
+```
+az sql server vnet-rule create -g rglsaks --server sqlsrvlsaks --name vnetrulelsaks --vnet-name vnetlsakssql --subnet subnetlsakssql
+```
+
+
+Check SQL DB:
+```
+az sql db show -g rglsaks --server sqlsrvlsaks --name sqldblsaks
+```
+
+
+Show SLQ DB Connection String:
+```
+az sql db show-connection-string --name sqldblsaks --server sqlsrvlsaks --client ado.net
+```
+
+
+Create Sql Server Firewall rule to allow local laptop/specific device to connect the database:
+```
+az sql server firewall-rule create -g rglsaks --server sqlsrvlsaks --name AllowMyIP --start-ip-address 37.186.45.24 --end-ip-address 37.186.45.24
+```
+
+
+Entity Framework to create DB Tables:
+```
+dotnet ef migrations add MigrateProductModel
+```
+
+
+```
+dotnet ef database update --connection "Server=tcp:sqlsrvlsaks.database.windows.net,1433;Initial Catalog=sqldblsaks;Persist Security Info=False;User ID=lsaksadmin;Password=lsakspassword@25;MultipleActiveResultSets=False;Encrypt=true;TrustServerCertificate=False;Connection Timeout=30;"
+```
+
+
+Create New Vnet:
+```
+az network vnet create -g rglsaks --name vnetlsaks --address-prefix 10.0.0.0/8 --subnet-name subnetlsaks --subnet-prefix 10.240.0.0/16
+```
+
+
+Check VNet:
+```
+az network vnet list -g rglsaks
+```
+
+
+Check Subnet:
+```
+az network vnet subnet show -g rglsaks --vnet-name vnetlsaks --name subnetlsaks --query id -o tsv
+```
+
+
+Create AKS Cluster within VNet
+```
+az aks create -g rglsaks -n lsaksapisqlclsn --node-count 1 --enable-addons monitoring --generate-ssh-keys --network-plugin azure --vnet-subnet-id "/subscriptions/2a4cc828-64a6-4168-ac96-cea7049e3c12/resourceGroups/rglsaks/providers/Microsoft.Network/virtualNetworks/vnetlsaks/subnets/subnetlsaks"
+```
+
+
+Create Azure Container registry
+```
+az acr create -g rglsaks --name shoppingacrtamil --sku basic
+```
+
+
+Config Map(can be automated in pipeline)Before Triggering Deployment Need to create config map:
+```
+D:\aks\aks-end-to-end-sql\aksl>kubectl apply -f shoppingapi-configmap.yaml
+```
+
+
+
+![Environment](image/environment.png)
+
+![ServiceConnection](image/serviceconnection.png)
+
+![pullsecret](image/pullsecret.png)
 
 | Image | Status |
 | ------------- | ------------- |
