@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: tamilarasusaravanakangeyanaks 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tamilarasusaravanakangeyanaks
+  template:
+    metadata:
+      labels:
+        app: tamilarasusaravanakangeyanaks 
+    spec:
+      containers:
+        - name: tamilarasusaravanakangeyanaks 
+          image: shoppingacrtamil.azurecr.io/tamilarasusaravanakangeyanaks
+          ports:
+          - containerPort: 8080
