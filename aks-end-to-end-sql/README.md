@@ -1,6 +1,15 @@
 # Deploying .Net Microservices with sql database to Azure Kubernetes Services(AKS) and Automating with Azure DevOps
 Deploying .Net Microservices into Kubernetes, and moving deployments to the cloud Azure Kubernetes Services (AKS) with using Azure Container Registry (ACR) and how to Automating Deployments with Azure DevOps and GitHub.
+
+Topology:
+![Topology](image/rglsaks_topology.jpg)
+
+![AKS_RESOURCE_TOPOLGY](image/rglsaks_mc_topology.jpg)
+
 ![](image/connectionflow.png)
+
+![](image/aks-node-resource-interactions.png)
+Reference: https://learn.microsoft.com/en-us/azure/aks/core-aks-concepts#deployments-and-yaml-manifests
 
 Create Resource Group:
 ```
@@ -21,8 +30,12 @@ az sql server create -n sqlsrvlsaks -g rglsaks --location centralindia --admin-u
 
 
 
-Create SQL DB(Free Tier):
+Create SQL DB:
+```
 # az sql db create -g rglsaks --server sqldblsaks --name subnetlsakssql --service-objective S0
+```
+or
+
 ```
 az sql db create -g rglsaks --server sqlsrvlsaks --name sqldblsaks --edition GeneralPurpose --family Gen5 --compute-model Serverless --capacity 1 --auto-pause-delay 60
 ```
@@ -111,6 +124,36 @@ D:\aks\aks-end-to-end-sql\aksl>kubectl apply -f shoppingapi-configmap.yaml
 ![ServiceConnection](image/serviceconnection.png)
 
 ![pullsecret](image/pullsecret.png)
+
+|-|Free tier|Standard tier|Premium tier|
+|--|--|--|--|
+|When to use|You want to experiment with AKS at no extra cost, You're new to AKS and Kubernetes|You're running production or mission-critical workloads and need high availability and reliability, You need a financially backed SLA, Automatically selected for AKS automatic clusters (if you create an AKS Automatic Cluster)|You're running production or mission-critical workloads and need high availability and reliability, You need a financially backed SLA, All mission critical, at scale, or production workloads requiring two years of one Kubernetes version support|
+|Supported cluster types|Development clusters or small scale testing environments, Clusters with fewer than 10 nodes|Enterprise-grade or production workloads, Clusters with up to 5,000 nodes, |Enterprise-grade or production workloads,Clusters with up to 5,000 nodes|
+|Pricing|Free cluster management, Pay-as-you-go for resources you consume|Pay-as-you-go for resources you consume|Pay-as-you-go for resources you consume|
+|Feature comparison|Recommended for clusters with fewer than 10 nodes, but can support up to 1,000 nodes, Includes all current AKS features|Uptime SLA is enabled by default, Greater cluster reliability and resources, Can support up to 5,000 nodes in a cluster, Includes all current AKS features|Includes all current AKS features from standard tier|
+
+Reference: https://learn.microsoft.com/en-us/azure/aks/free-standard-pricing-tiers
+
+Cost(Per Day with sanity testing traffic):
+|Service Name|Service Resource|Spend|
+|--|--|--|
+|SQL Database|vCore|$3.53|
+|Virtual Machines|D2 v2/DS2 v2|$1.62|
+|Log Analytics|Pay-as-you-go Data Ingestion|$0.45|
+|Storage|P10 LRS Disk|$0.28|
+|Virtual Network|Standard IPv4 Static Public IP|$0.25|
+|Container Registry|Basic Registry Unit|$0.17|
+|SQL Database|General Purpose Data Stored|$0.1|
+|Bandwidth|Inter Continent Data Transfer Out - ASIA To Any|$0|
+|Bandwidth|Intra Continent Data Transfer Out|$0|
+|Storage|All Other Operations|$0|
+|Load Balancer|Standard Data Processed - Free|$0|
+|Azure Cognitive Search|Free Unit|$0|
+|Bandwidth|Standard Data Transfer Out - Free|$0|
+|SQL Database|1 vCore - Free|$0|
+|Azure App Service|F1 App|$0|
+|SQL Database|General Purpose Data Stored - Free|$0|
+|Load Balancer|Standard Included LB Rules and Outbound Rules - Free|$0|
 
 | Image | Status |
 | ------------- | ------------- |
