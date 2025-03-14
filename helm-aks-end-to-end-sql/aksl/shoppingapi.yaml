@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shoppingapi-deployment
+  labels:
+    app: shoppingapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shoppingapi
+  template:
+    metadata:
+      labels:
+        app: shoppingapi
+    spec:
+      imagePullSecrets:
+        - name: acr-secret
+      initContainers:
+      - name: init-myapp
+        image: busybox
+        command: ['sh', '-c', 'echo Init container running']
+      containers:
+        - name: shoppingapi
+          image: shoppingacrtamil.azurecr.io/shoppingapi:v3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "0.1"
+            limits:
+              memory: "128Mi"
+              cpu: "0.3"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shoppingapi-service
+spec:
+  # type: LoadBalancer
+  selector:
+    app: shoppingapi
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

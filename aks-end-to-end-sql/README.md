@@ -102,7 +102,7 @@ az network vnet subnet show -g rglsaks --vnet-name vnetlsaks --name subnetlsaks 
 
 Create AKS Cluster within VNet
 ```
-az aks create -g rglsaks -n lsaksapisqlclsn --node-count 1 --enable-addons monitoring --generate-ssh-keys --network-plugin azure --vnet-subnet-id "/subscriptions/2a4cc828-64a6-4168-ac96-cea7049e3c12/resourceGroups/rglsaks/providers/Microsoft.Network/virtualNetworks/vnetlsaks/subnets/subnetlsaks"
+az aks create -g rglsaks -n lsaksapisqlclsn --node-count 1 --enable-addons monitoring --generate-ssh-keys --network-plugin azure --vnet-subnet-id "/subscriptions/abcxyz-64a6-4168-ac96-abcxyz/resourceGroups/rglsaks/providers/Microsoft.Network/virtualNetworks/vnetlsaks/subnets/subnetlsaks"
 ```
 
 

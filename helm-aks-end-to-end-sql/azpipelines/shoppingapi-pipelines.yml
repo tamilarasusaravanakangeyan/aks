@@ -1,0 +1,85 @@
+# Deploy to Azure Kubernetes Service
+# Build and push image to Azure Container Registry; Deploy to Azure Kubernetes Service
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+    branches:
+      include:
+      - main
+    paths:
+      include:
+      - aks-end-to-end-sql/Shopping/Shopping.API/*
+      - aks-end-to-end-sql/aksl/shoppingapi.yaml
+
+resources:
+- repo: self
+
+variables:
+
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: 'b7cabdaa-5a1d-465a-a448-a37f41929edb'
+  imageRepository: 'shoppingapi'
+  containerRegistry: 'shoppingacrtamil.azurecr.io'
+  dockerfilePath: 'aks-end-to-end-sql/Shopping/Shopping.API/Dockerfile'
+  tag: '$(Build.BuildId)'
+  imagePullSecret: 'shoppingacrtamil3548852d-auth'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        buildContext: $(Build.SourcesDirectory)/aks-end-to-end-sql/Shopping
+        tags: |
+          $(tag)
+
+    - upload: aks-end-to-end-sql/aksl
+      artifact: aks-end-to-end-sql/aksl
+
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'tamilarasusaravanakangeyanaks-1184.default'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: createSecret
+              secretName: $(imagePullSecret)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              manifests: |
+                $(Pipeline.Workspace)/aks-end-to-end-sql/aksl/shoppingapi.yaml
+              imagePullSecrets: |
+                $(imagePullSecret)
+              containers: |
+                $(containerRegistry)/$(imageRepository):$(tag)
+
