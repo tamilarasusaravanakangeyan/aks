@@ -399,4 +399,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 terraform-course/*
-./terraform-learn/.terraform/providers/registry.terraform.io/hashicorp/azurerm/2.46.0/windows_386/terraform-provider-azurerm_v2.46.0_x5.exe
+terraform-learn/.terraform/providers/registry.terraform.io/hashicorp/azurerm/2.46.0/windows_386/terraform-provider-azurerm_v2.46.0_x5.exe

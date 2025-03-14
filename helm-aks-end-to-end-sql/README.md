@@ -1,10 +1,35 @@
-3 Steps to automate API deployment
+## 3 Steps to automate API deployment
 - Step 1: Create AKS Cluster using Terraform
 - Step 2: Create ACR and upload image and download pull secret
 - Step 3: Create/Deploy Services to AKS using Helm
 
-### Step 1: Create/Deploy AKS Cluster
-
+## Helm Folder Structure
+```
+mychart/
+├── charts/
+├── templates/
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   ├── _helpers.tpl
+│   ├── ingress.yaml
+│   └── NOTES.txt
+├── Chart.yaml
+├── values.yaml
+└── README.md
+```
+## help commands used
+```
+helm create shoppingchart
+helm install shoppingapi shoppingchart
+helm upgrade shoppingapi shoppingchart 
+helm rollback shoppingapi 1
+helm history shoppingapi
+helm history shoppingapi
+helm list
+helm uninstall shoppingapi
+```
+## Step 1: Create/Deploy AKS Cluster
+```
 Microsoft Windows [Version 10.0.26100.3194]
 (c) Microsoft Corporation. All rights reserved.
 
@@ -153,9 +178,10 @@ aks_id = "/subscriptions/abcxyz-64a6-4168-ac96-abcxyz/resourcegroups/aks_terrafo
 aks_node_rg = "aks_terraform_resources_rg"
 
 D:\wrkspc\git_repo\tamilsmtp\aks\terraform-learn>
+```
 
-### Step 2: Create ACR and upload image and download pull secret
-
+## Step 2: Create ACR and upload image and download pull secret
+```
 Microsoft Windows [Version 10.0.26100.3194]
 (c) Microsoft Corporation. All rights reserved.
 
@@ -240,8 +266,9 @@ acr-secret                          kubernetes.io/dockerconfigjson   1      38s
 sh.helm.release.v1.shoppingapi.v1   helm.sh/release.v1               1      31m
 
 C:\Users\tamil>az acr list -g aks_terraform_resources_rg --query "[].{acrName:name,location:location,sku:sku.name}" --output table
-
-### Step 3: Create/Deploy Services to AKS using Helm
+```
+## Step 3: Create/Deploy Services to AKS using Helm
+```
 D:\wrkspc\git_repo\tamilsmtp\aks\helm-aks-end-to-end-sql\helm>az aks get-credentials -g aks_terraform_rg --name terraform-aks
 Merged "terraform-aks" as current context in C:\Users\tamil\.kube\config
 
@@ -333,3 +360,4 @@ shoppingapi     default         3               2025-03-14 11:15:11.783243 +0530
 
 D:\wrkspc\git_repo\tamilsmtp\aks\helm-aks-end-to-end-sql\helm>helm uninstall shoppingapi
 release "shoppingapi" uninstalled
+```
